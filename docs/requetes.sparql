@@ -1,0 +1,27 @@
+PREFIX edu: <http://stackunity.org/education#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+# Exécuter UNE requête à la fois, en conservant les PREFIX.
+# 1. Personnes, y compris les descendants de Personne
+SELECT DISTINCT ?personne ?nom ?type ?email WHERE {
+  ?personne a owl:NamedIndividual ; a ?type .
+  ?type rdfs:subClassOf* edu:Personne .
+  OPTIONAL { ?personne edu:nom ?nom }
+  OPTIONAL { ?personne edu:email ?email }
+} ORDER BY ?nom
+
+# 2. Organismes, y compris Stage selon le modèle fourni
+# SELECT DISTINCT ?organisme ?nom ?ville WHERE {
+#   ?organisme a owl:NamedIndividual ; a ?type .
+#   ?type rdfs:subClassOf* edu:Organisme .
+#   OPTIONAL { ?organisme edu:nom ?nom }
+#   OPTIONAL { ?organisme edu:ville ?ville }
+# }
+
+# 3. Relations d'Amira (décommenter pour essayer)
+# SELECT ?relation ?cible WHERE {
+#   edu:Amira ?relation ?cible .
+#   FILTER(isIRI(?cible) && ?relation != rdf:type)
+# }
